@@ -16,9 +16,10 @@ public class RelatorioPedido {
         this.formatacao = formatacao;
     }
 
-    public String gerar(Pedido pedido) {
-        return String.format("%s%n  Valor:    R$ %8.2f%n  Desconto: R$ %8.2f%n  Frete:    R$ %8.2f%n  Total:    R$ %8.2f%n",
-                formatacao.cabecalho(pedido),
+    public String formatar(Pedido pedido) {
+        return String.format(
+                "%s | valor: %.2f | desconto: %.2f | frete: %.2f | total: %.2f",
+                formatacao.etiqueta(pedido),
                 pedido.getValor(),
                 calculadora.desconto(pedido),
                 calculadora.frete(pedido),

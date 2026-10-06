@@ -9,9 +9,9 @@ import br.venson.net.designpatterns.strategy.formatacao.FormatacaoComum;
 import br.venson.net.designpatterns.strategy.formatacao.FormatacaoCorporativa;
 import br.venson.net.designpatterns.strategy.formatacao.FormatacaoVip;
 import br.venson.net.designpatterns.strategy.frete.EstrategiaFrete;
-import br.venson.net.designpatterns.strategy.frete.FreteFixo;
-import br.venson.net.designpatterns.strategy.frete.FreteGratis;
-import br.venson.net.designpatterns.strategy.frete.FretePorPeso;
+import br.venson.net.designpatterns.strategy.frete.FreteComum;
+import br.venson.net.designpatterns.strategy.frete.FreteCorporativo;
+import br.venson.net.designpatterns.strategy.frete.FreteVip;
 
 /**
  * Agrupa as estratégias padrão de um tipo de cliente. É o ÚNICO ponto do sistema
@@ -23,9 +23,9 @@ public record PerfilCliente(EstrategiaDesconto desconto,
 
     public static PerfilCliente para(TipoCliente tipo) {
         return switch (tipo) {
-            case COMUM -> new PerfilCliente(new DescontoComum(), new FretePorPeso(), new FormatacaoComum());
-            case VIP -> new PerfilCliente(new DescontoVip(), new FreteGratis(), new FormatacaoVip());
-            case CORPORATIVO -> new PerfilCliente(new DescontoCorporativo(), new FreteFixo(25.0), new FormatacaoCorporativa());
+            case COMUM -> new PerfilCliente(new DescontoComum(), new FreteComum(), new FormatacaoComum());
+            case VIP -> new PerfilCliente(new DescontoVip(), new FreteVip(), new FormatacaoVip());
+            case CORPORATIVO -> new PerfilCliente(new DescontoCorporativo(), new FreteCorporativo(), new FormatacaoCorporativa());
         };
     }
 }

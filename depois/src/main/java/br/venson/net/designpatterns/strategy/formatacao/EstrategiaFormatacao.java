@@ -2,9 +2,9 @@ package br.venson.net.designpatterns.strategy.formatacao;
 
 import br.venson.net.designpatterns.strategy.Pedido;
 
-/** Estratégia: como o cabeçalho do relatório é apresentado. */
+/** Estratégia: como o cliente é identificado no relatório. */
 @FunctionalInterface
 public interface EstrategiaFormatacao {
 
-    String cabecalho(Pedido pedido);
+    String etiqueta(Pedido pedido);
 }

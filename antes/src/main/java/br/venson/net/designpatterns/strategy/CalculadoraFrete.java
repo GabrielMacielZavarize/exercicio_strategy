@@ -1,18 +1,26 @@
 package br.venson.net.designpatterns.strategy;
 
-// ANTI-PATTERN: o mesmo switch em TipoCliente, agora para o frete.
 public class CalculadoraFrete {
 
     public double calcular(Pedido pedido) {
-        switch (pedido.getCliente().getTipo()) {
+        double freteBase;
+        switch (pedido.getTipoCliente()) {
             case COMUM:
-                return 15.0 + pedido.getPesoKg() * 2.0;
+                freteBase = 25.0;
+                break;
             case VIP:
-                return 0.0;
+                freteBase = 12.0;
+                break;
             case CORPORATIVO:
-                return 25.0;
+                freteBase = 0.0;
+                break;
             default:
                 throw new IllegalArgumentException("Tipo de cliente desconhecido");
         }
+
+        double fretePorPeso = pedido.getPeso() * 3.0;
+        double adicionalRegiao = pedido.getRegiao().equalsIgnoreCase("norte") ? 30.0 : 0.0;
+
+        return freteBase + fretePorPeso + adicionalRegiao;
     }
 }

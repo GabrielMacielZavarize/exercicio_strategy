@@ -5,7 +5,7 @@ import br.venson.net.designpatterns.strategy.Pedido;
 public class FormatacaoVip implements EstrategiaFormatacao {
 
     @Override
-    public String cabecalho(Pedido pedido) {
-        return "*** Pedido VIP de " + pedido.getCliente().getNome() + " ***";
+    public String etiqueta(Pedido pedido) {
+        return "Cliente VIP (10% de desconto)";
     }
 }

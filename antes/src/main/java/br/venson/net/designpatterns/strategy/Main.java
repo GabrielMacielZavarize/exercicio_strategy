@@ -5,14 +5,15 @@ public class Main {
     public static void main(String[] args) {
         RelatorioPedido relatorio = new RelatorioPedido();
 
-        Pedido[] pedidos = {
-                new Pedido(new Cliente("Ana", TipoCliente.COMUM), 200.0, 3.0),
-                new Pedido(new Cliente("Bruno", TipoCliente.VIP), 500.0, 5.0),
-                new Pedido(new Cliente("Acme Ltda", TipoCliente.CORPORATIVO), 1500.0, 40.0)
-        };
+        Pedido comum = new Pedido(TipoCliente.COMUM, 200.0, 2.0, "sul");
+        Pedido vip = new Pedido(TipoCliente.VIP, 200.0, 2.0, "sul");
+        Pedido corporativo = new Pedido(TipoCliente.CORPORATIVO, 200.0, 2.0, "norte");
 
-        for (Pedido pedido : pedidos) {
-            System.out.println(relatorio.gerar(pedido));
-        }
+        System.out.println(relatorio.formatar(comum));
+        System.out.println(relatorio.formatar(vip));
+        System.out.println(relatorio.formatar(corporativo));
+
+        // Tente responder: o que muda aqui ao adicionar um novo TipoCliente?
+        // Quantas classes precisam ser editadas? Dá para trocar a regra em runtime?
     }
 }

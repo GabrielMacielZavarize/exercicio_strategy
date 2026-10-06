@@ -1,35 +1,37 @@
 package br.venson.net.designpatterns.strategy;
 
 import br.venson.net.designpatterns.strategy.desconto.DescontoPromocional;
+import br.venson.net.designpatterns.strategy.frete.FreteGratis;
 
 public class Main {
 
     public static void main(String[] args) {
-        Pedido[] pedidos = {
-                new Pedido(new Cliente("Ana", TipoCliente.COMUM), 200.0, 3.0),
-                new Pedido(new Cliente("Bruno", TipoCliente.VIP), 500.0, 5.0),
-                new Pedido(new Cliente("Acme Ltda", TipoCliente.CORPORATIVO), 1500.0, 40.0)
-        };
+        Pedido comum = new Pedido(TipoCliente.COMUM, 200.0, 2.0, "sul");
+        Pedido vip = new Pedido(TipoCliente.VIP, 200.0, 2.0, "sul");
+        Pedido corporativo = new Pedido(TipoCliente.CORPORATIVO, 200.0, 2.0, "norte");
 
-        System.out.println("=== Regras padrão por tipo de cliente ===\n");
-        for (Pedido pedido : pedidos) {
-            PerfilCliente perfil = PerfilCliente.para(pedido.getCliente().getTipo());
-            RelatorioPedido relatorio = new RelatorioPedido(CalculadoraPedido.para(perfil), perfil.formatacao());
-            System.out.println(relatorio.gerar(pedido));
+        System.out.println("=== Regras padrão por tipo de cliente ===");
+        for (Pedido pedido : new Pedido[]{comum, vip, corporativo}) {
+            System.out.println(relatorioPara(pedido.getTipoCliente()).formatar(pedido));
         }
 
-        System.out.println("=== Troca de estratégia em runtime ===\n");
-        Pedido pedidoAna = pedidos[0];
-        PerfilCliente perfilAna = PerfilCliente.para(pedidoAna.getCliente().getTipo());
-        CalculadoraPedido calculadora = CalculadoraPedido.para(perfilAna);
-        RelatorioPedido relatorio = new RelatorioPedido(calculadora, perfilAna.formatacao());
+        System.out.println();
+        System.out.println("=== Troca de estratégia em runtime (cliente comum) ===");
+        PerfilCliente perfil = PerfilCliente.para(TipoCliente.COMUM);
+        CalculadoraPedido calculadora = CalculadoraPedido.para(perfil);
+        RelatorioPedido relatorio = new RelatorioPedido(calculadora, perfil.formatacao());
 
         calculadora.setEstrategiaDesconto(new DescontoPromocional(30));
-        System.out.println("Black Friday (30% para todos):");
-        System.out.println(relatorio.gerar(pedidoAna));
+        calculadora.setEstrategiaFrete(new FreteGratis());
+        System.out.println("Black Friday (30% + frete grátis): " + relatorio.formatar(comum));
 
-        calculadora.setEstrategiaDesconto(perfilAna.desconto());
-        System.out.println("Fim da promoção (volta à regra padrão):");
-        System.out.println(relatorio.gerar(pedidoAna));
+        calculadora.setEstrategiaDesconto(perfil.desconto());
+        calculadora.setEstrategiaFrete(perfil.frete());
+        System.out.println("Fim da promoção (regra padrão):    " + relatorio.formatar(comum));
+    }
+
+    private static RelatorioPedido relatorioPara(TipoCliente tipo) {
+        PerfilCliente perfil = PerfilCliente.para(tipo);
+        return new RelatorioPedido(CalculadoraPedido.para(perfil), perfil.formatacao());
     }
 }

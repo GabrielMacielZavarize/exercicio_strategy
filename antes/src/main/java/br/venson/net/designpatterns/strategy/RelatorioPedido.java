@@ -1,34 +1,32 @@
 package br.venson.net.designpatterns.strategy;
 
-// ANTI-PATTERN: além de repetir o switch para a formatação, o relatório
-// instancia as calculadoras concretas (não dá para substituí-las em teste).
 public class RelatorioPedido {
 
-    private final CalculadoraDesconto calculadoraDesconto = new CalculadoraDesconto();
-    private final CalculadoraFrete calculadoraFrete = new CalculadoraFrete();
-
-    public String gerar(Pedido pedido) {
-        double desconto = calculadoraDesconto.calcular(pedido);
-        double frete = calculadoraFrete.calcular(pedido);
-        double total = pedido.getValor() - desconto + frete;
-
-        String cabecalho;
-        switch (pedido.getCliente().getTipo()) {
+    public String formatar(Pedido pedido) {
+        String etiqueta;
+        switch (pedido.getTipoCliente()) {
             case COMUM:
-                cabecalho = "Pedido de " + pedido.getCliente().getNome();
+                etiqueta = "Cliente comum";
                 break;
             case VIP:
-                cabecalho = "*** Pedido VIP de " + pedido.getCliente().getNome() + " ***";
+                etiqueta = "Cliente VIP (10% de desconto)";
                 break;
             case CORPORATIVO:
-                cabecalho = "[CORPORATIVO] " + pedido.getCliente().getNome().toUpperCase()
-                        + " - faturamento em 30 dias";
+                etiqueta = "Cliente corporativo (20% de desconto)";
                 break;
             default:
                 throw new IllegalArgumentException("Tipo de cliente desconhecido");
         }
 
-        return String.format("%s%n  Valor:    R$ %8.2f%n  Desconto: R$ %8.2f%n  Frete:    R$ %8.2f%n  Total:    R$ %8.2f%n",
-                cabecalho, pedido.getValor(), desconto, frete, total);
+        CalculadoraDesconto desconto = new CalculadoraDesconto();
+        CalculadoraFrete frete = new CalculadoraFrete();
+
+        double valorDesconto = desconto.calcular(pedido);
+        double valorFrete = frete.calcular(pedido);
+        double total = pedido.getValor() - valorDesconto + valorFrete;
+
+        return String.format(
+                "%s | valor: %.2f | desconto: %.2f | frete: %.2f | total: %.2f",
+                etiqueta, pedido.getValor(), valorDesconto, valorFrete, total);
     }
 }

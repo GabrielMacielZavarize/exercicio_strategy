@@ -5,7 +5,7 @@ import br.venson.net.designpatterns.strategy.Pedido;
 public class FormatacaoCorporativa implements EstrategiaFormatacao {
 
     @Override
-    public String cabecalho(Pedido pedido) {
-        return "[CORPORATIVO] " + pedido.getCliente().getNome().toUpperCase() + " - faturamento em 30 dias";
+    public String etiqueta(Pedido pedido) {
+        return "Cliente corporativo (20% de desconto)";
     }
 }

@@ -6,6 +6,6 @@ public class DescontoComum implements EstrategiaDesconto {
 
     @Override
     public double calcular(Pedido pedido) {
-        return 0.0;
+        return pedido.getValor() * 0.0;
     }
 }
